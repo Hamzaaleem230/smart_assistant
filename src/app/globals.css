@@ -1,4 +1,4 @@
-/* ====== global.css ====== */
+/* ====== global.css (Fully Optimized Responsive Version) ====== */
 :root {
   --font-family: 'Inter', sans-serif;
   --color-bg: #f4f4f8;
@@ -30,7 +30,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
   transition: background var(--transition-fast), color var(--transition-fast);
   background-color: #562d90;
 }
@@ -40,6 +40,7 @@ body.dark-mode {
   color: var(--dark-text);
 }
 
+/* Heading */
 h1 {
   position: relative;
   left: -30px;
@@ -86,6 +87,14 @@ body.dark-mode .app-container {
   align-items: center;
   justify-content: space-between;
   transition: all 0.3s ease;
+}
+
+.app-header h1 {
+  margin: 0;
+  flex: 1;
+  text-align: center;
+  position: relative;
+  left: 0;
 }
 
 .logo-icon {
@@ -135,7 +144,6 @@ body.dark-mode .app-container {
   flex-direction: column;
   gap: 10px;
   scroll-behavior: smooth;
-  transition: all 0.3s ease;
 }
 
 /* Input Area */
@@ -147,6 +155,7 @@ body.dark-mode .app-container {
   border-top: 1px solid #e5e7eb;
   border-radius: 17px;
   transition: all 0.3s ease;
+  padding: 8px;
 }
 
 body.dark-mode .input-area {
@@ -311,78 +320,34 @@ body.dark-mode .action-buttons button:hover {
   border-radius: 10px;
 }
 
-/* ======= Responsive Improvements ======= */
+/* ===== Responsive Adjustments ===== */
+
+/* Medium Screens (Tablets, small laptops) */
 @media (max-width: 900px) {
-  .app-container {
-    max-width: 90%;
-  }
-  .chat-wrapper {
-    padding: 16px;
-    gap: 12px;
-  }
-  .app-header {
-    font-size: 1.3rem;
-  }
-  .input-area input {
-    font-size: 15px;
-    padding: 8px 12px;
-  }
-  .input-area button {
-    font-size: 14px;
-    padding: 8px 12px;
-  }
+  .app-container { max-width: 95%; height: 96vh; }
+  .chat-wrapper { padding: 16px; gap: 12px; }
+  .app-header { font-size: 1.3rem; padding: 14px; }
 }
 
+/* Mobile Landscape / Large Phones */
 @media (max-width: 600px) {
-  .app-container {
-    border-radius: 0;
-    height: 100vh;
-  }
-
-  .app-header {
-    font-size: 1.2rem;
-    padding: 12px;
-  }
-
-  .input-area button {
-    padding: 8px 12px;
-    font-size: 14px;
-  }
-
-  .input-area input {
-    font-size: 14px;
-    padding: 8px 12px;
-  }
-
-  .action-buttons button {
-    font-size: 12px;
-    padding: 5px 10px;
-  }
+  body { align-items: flex-start; overflow-y: auto; }
+  .app-container { border-radius: 0; height: 100vh; width: 100%; }
+  .app-header { font-size: 1.2rem; padding: 12px; }
+  .chat-wrapper { padding: 12px; gap: 10px; }
+  .bubble { font-size: 14px; padding: 10px 12px; max-width: 90%; }
+  .input-area { gap: 6px; padding: 6px; }
+  .input-area input, .input-area button { font-size: 14px; padding: 8px 12px; }
+  .action-buttons button { font-size: 12px; padding: 5px 10px; }
 }
 
+/* Small Phones (≤400px like iPhone SE, Galaxy Fold) */
 @media (max-width: 400px) {
-  .app-header h1 {
-    font-size: 1rem;
-  }
-  #logo {
-    width: 40px;
-    height: 40px;
-    left: 10px;
-  }
-  .input-area input {
-    font-size: 13px;
-    padding: 6px 10px;
-  }
-  .input-area button {
-    font-size: 12px;
-    padding: 6px 10px;
-  }
-  .action-buttons button {
-    font-size: 10px;
-    padding: 4px 8px;
-  }
-  .bubble {
-    font-size: 14px;
-    padding: 10px 12px;
-  }
+  #logo { width: 42px; height: 42px; left: 0; }
+  .app-header { font-size: 1rem; padding: 10px; }
+  .chat-wrapper { padding: 10px; gap: 8px; }
+  .bubble { font-size: 13px; padding: 8px 10px; max-width: 95%; }
+  .input-area { padding: 4px; gap: 4px; }
+  .input-area input, .input-area button { font-size: 13px; padding: 6px 10px; }
+  .action-buttons button { font-size: 11px; padding: 4px 8px; }
 }
