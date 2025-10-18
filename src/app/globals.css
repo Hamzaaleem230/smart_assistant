@@ -45,6 +45,7 @@ h1 {
   left: -30px;
   top: -5px;
   color: white;
+  transition: all 0.3s ease;
 }
 
 /* App Container */
@@ -59,7 +60,7 @@ h1 {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: background var(--transition-fast);
+  transition: background var(--transition-fast), transform 0.3s ease;
 }
 
 #logo {
@@ -67,6 +68,7 @@ h1 {
   border-radius: 50%;
   position: relative;
   left: 20px;
+  transition: all 0.3s ease;
 }
 
 body.dark-mode .app-container {
@@ -83,6 +85,7 @@ body.dark-mode .app-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  transition: all 0.3s ease;
 }
 
 .logo-icon {
@@ -104,11 +107,12 @@ body.dark-mode .app-container {
   border-radius: 8px;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: background var(--transition-fast);
+  transition: background var(--transition-fast), transform 0.2s ease;
 }
 
 .toggle-theme:hover {
   background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.05);
 }
 
 /* Chat Area */
@@ -120,6 +124,7 @@ body.dark-mode .app-container {
   padding: 20px;
   gap: 16px;
   overflow: hidden;
+  transition: all 0.3s ease;
 }
 
 .chat-box {
@@ -130,6 +135,7 @@ body.dark-mode .app-container {
   flex-direction: column;
   gap: 10px;
   scroll-behavior: smooth;
+  transition: all 0.3s ease;
 }
 
 /* Input Area */
@@ -140,6 +146,7 @@ body.dark-mode .app-container {
   background: white;
   border-top: 1px solid #e5e7eb;
   border-radius: 17px;
+  transition: all 0.3s ease;
 }
 
 body.dark-mode .input-area {
@@ -155,7 +162,7 @@ body.dark-mode .input-area {
   outline: none;
   font-size: 16px;
   background: white;
-  transition: border var(--transition-fast);
+  transition: all 0.3s ease;
 }
 
 body.dark-mode .input-area input {
@@ -176,11 +183,12 @@ body.dark-mode .input-area input {
   border-radius: var(--bubble-radius);
   cursor: pointer;
   font-weight: 500;
-  transition: background var(--transition-fast);
+  transition: all 0.3s ease;
 }
 
 .input-area button:hover {
   background: #4338ca;
+  transform: scale(1.05);
 }
 
 /* Chat Bubbles */
@@ -194,6 +202,7 @@ body.dark-mode .input-area input {
   white-space: pre-wrap;
   word-wrap: break-word;
   position: relative;
+  transition: all 0.3s ease;
 }
 
 .bubble.user {
@@ -222,11 +231,6 @@ body.dark-mode .bubble.bot {
   background: var(--color-error);
   color: red;
   font-weight: bold;
-}
-
-@keyframes fadeInUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
 }
 
 /* Typing Indicator */
@@ -279,12 +283,13 @@ body.dark-mode .action-buttons {
   border-radius: 12px;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .action-buttons button:hover {
   background: var(--color-primary);
   color: white;
+  transform: scale(1.05);
 }
 
 body.dark-mode .action-buttons button {
@@ -295,6 +300,7 @@ body.dark-mode .action-buttons button {
 body.dark-mode .action-buttons button:hover {
   background: var(--dark-text);
   color: var(--color-dark-bg);
+  transform: scale(1.05);
 }
 
 .chat-box::-webkit-scrollbar {
@@ -305,7 +311,28 @@ body.dark-mode .action-buttons button:hover {
   border-radius: 10px;
 }
 
-/* Responsive */
+/* ======= Responsive Improvements ======= */
+@media (max-width: 900px) {
+  .app-container {
+    max-width: 90%;
+  }
+  .chat-wrapper {
+    padding: 16px;
+    gap: 12px;
+  }
+  .app-header {
+    font-size: 1.3rem;
+  }
+  .input-area input {
+    font-size: 15px;
+    padding: 8px 12px;
+  }
+  .input-area button {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+}
+
 @media (max-width: 600px) {
   .app-container {
     border-radius: 0;
@@ -330,5 +357,32 @@ body.dark-mode .action-buttons button:hover {
   .action-buttons button {
     font-size: 12px;
     padding: 5px 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  .app-header h1 {
+    font-size: 1rem;
+  }
+  #logo {
+    width: 40px;
+    height: 40px;
+    left: 10px;
+  }
+  .input-area input {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+  .input-area button {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  .action-buttons button {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+  .bubble {
+    font-size: 14px;
+    padding: 10px 12px;
   }
 }
