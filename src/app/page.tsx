@@ -2,22 +2,35 @@
 import { useState, useRef, useEffect } from "react";
 
 export default function Home() {
-  const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
-    []
-  );
+  const [messages, setMessages] = useState<{ sender: string; text: string }[]>([]);
   const [input, setInput] = useState("");
   const [darkMode, setDarkMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const chatBoxRef = useRef<HTMLDivElement>(null);
 
-  // ✅ Dark mode body class effect
+  // ✅ Dark mode toggle (with localStorage)
   useEffect(() => {
-    if (darkMode) {
-      document.body.classList.add("dark-mode");
-    } else {
-      document.body.classList.remove("dark-mode");
-    }
+    const savedMode = localStorage.getItem("darkMode");
+    if (savedMode === "true") setDarkMode(true);
+  }, []);
+
+  useEffect(() => {
+    document.body.classList.toggle("dark-mode", darkMode);
+    localStorage.setItem("darkMode", String(darkMode));
   }, [darkMode]);
+
+  // ✅ Load old chat (optional)
+  useEffect(() => {
+    const savedChat = localStorage.getItem("inquister-chat");
+    if (savedChat) setMessages(JSON.parse(savedChat));
+  }, []);
+
+  // ✅ Save chat automatically
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem("inquister-chat", JSON.stringify(messages));
+    }
+  }, [messages]);
 
   const playSound = () => {
     const audio = new Audio(
@@ -26,11 +39,20 @@ export default function Home() {
     audio.play();
   };
 
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      chatBoxRef.current?.scrollTo({
+        top: chatBoxRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }, 150);
+  };
+
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const userMessage = { sender: "user", text: `🧑‍💻 You: ${input}` };
-    setMessages((prev) => [...prev, userMessage]);
+    const userMsg = { sender: "user", text: `🧑‍💻 You: ${input}` };
+    setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setLoading(true);
     scrollToBottom();
@@ -60,23 +82,17 @@ export default function Home() {
     }
   };
 
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      chatBoxRef.current?.scrollTo({
-        top: chatBoxRef.current.scrollHeight,
-        behavior: "smooth",
-      });
-    }, 100);
+  const clearChat = () => {
+    setMessages([]);
+    localStorage.removeItem("inquister-chat");
   };
-
-  const clearChat = () => setMessages([]);
 
   const exportChat = () => {
     const text = messages.map((m) => m.text).join("\n\n");
     const blob = new Blob([text], { type: "text/plain" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "chat.txt";
+    a.download = "inquister_chat.txt";
     a.click();
   };
 
@@ -87,7 +103,7 @@ export default function Home() {
         <img id="logo" src="/logo.jpg" alt="logo" />
         <h1>Inquister</h1>
         <button className="toggle-theme" onClick={() => setDarkMode(!darkMode)}>
-          🌙 Toggle
+          {darkMode ? "☀️ Light" : "🌙 Dark"}
         </button>
       </header>
 
@@ -95,7 +111,13 @@ export default function Home() {
       <main className="chat-wrapper">
         <div ref={chatBoxRef} id="chat-box" className="chat-box">
           {messages.map((msg, i) => (
-            <div key={i} className={`bubble ${msg.sender}`}>
+            <div
+              key={i}
+              className={`bubble ${msg.sender}`}
+              style={{
+                animation: "fadeIn 0.3s ease",
+              }}
+            >
               {msg.text}
             </div>
           ))}
@@ -121,7 +143,9 @@ export default function Home() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           />
-          <button onClick={sendMessage}>Send</button>
+          <button onClick={sendMessage} disabled={loading}>
+            {loading ? "..." : "Send"}
+          </button>
         </div>
 
         {/* ACTION BUTTONS */}
