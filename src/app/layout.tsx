@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 // ✅ Site Metadata
 export const metadata: Metadata = {
-  title: "AI Chatbot",
+  title: "Inquister",
   description: "Simple chat UI",
 };
 
