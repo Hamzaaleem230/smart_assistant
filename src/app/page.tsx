@@ -2,35 +2,32 @@
 import { useState, useRef, useEffect } from "react";
 
 export default function Home() {
-  const [messages, setMessages] = useState<{ sender: string; text: string }[]>([]);
+  const [messages, setMessages] = useState<{ sender: string; text: string }[]>(
+    []
+  );
   const [input, setInput] = useState("");
   const [darkMode, setDarkMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const chatBoxRef = useRef<HTMLDivElement>(null);
 
-  // ✅ Dark mode toggle (with localStorage)
+  // ✅ Dark mode body class effect
   useEffect(() => {
-    const savedMode = localStorage.getItem("darkMode");
-    if (savedMode === "true") setDarkMode(true);
-  }, []);
-
-  useEffect(() => {
-    document.body.classList.toggle("dark-mode", darkMode);
-    localStorage.setItem("darkMode", String(darkMode));
+    if (darkMode) {
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+    }
   }, [darkMode]);
 
-  // ✅ Load old chat (optional)
+  // ✅ Default welcome message (runs once on load)
   useEffect(() => {
-    const savedChat = localStorage.getItem("inquister-chat");
-    if (savedChat) setMessages(JSON.parse(savedChat));
+    setMessages([
+      {
+        sender: "bot",
+        text: "🤖 Inquister: Hi there! I’m Inquister — your smart AI companion. Ask me anything, and I’ll try to help you with quick and clear answers! 😊",
+      },
+    ]);
   }, []);
-
-  // ✅ Save chat automatically
-  useEffect(() => {
-    if (messages.length > 0) {
-      localStorage.setItem("inquister-chat", JSON.stringify(messages));
-    }
-  }, [messages]);
 
   const playSound = () => {
     const audio = new Audio(
@@ -39,20 +36,11 @@ export default function Home() {
     audio.play();
   };
 
-  const scrollToBottom = () => {
-    setTimeout(() => {
-      chatBoxRef.current?.scrollTo({
-        top: chatBoxRef.current.scrollHeight,
-        behavior: "smooth",
-      });
-    }, 150);
-  };
-
   const sendMessage = async () => {
     if (!input.trim()) return;
 
-    const userMsg = { sender: "user", text: `🧑‍💻 You: ${input}` };
-    setMessages((prev) => [...prev, userMsg]);
+    const userMessage = { sender: "user", text: `🧑‍💻 You: ${input}` };
+    setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setLoading(true);
     scrollToBottom();
@@ -82,17 +70,23 @@ export default function Home() {
     }
   };
 
-  const clearChat = () => {
-    setMessages([]);
-    localStorage.removeItem("inquister-chat");
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      chatBoxRef.current?.scrollTo({
+        top: chatBoxRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }, 100);
   };
+
+  const clearChat = () => setMessages([]);
 
   const exportChat = () => {
     const text = messages.map((m) => m.text).join("\n\n");
     const blob = new Blob([text], { type: "text/plain" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "inquister_chat.txt";
+    a.download = "chat.txt";
     a.click();
   };
 
@@ -103,7 +97,7 @@ export default function Home() {
         <img id="logo" src="/logo.jpg" alt="logo" />
         <h1>Inquister</h1>
         <button className="toggle-theme" onClick={() => setDarkMode(!darkMode)}>
-          {darkMode ? "☀️ Light" : "🌙 Dark"}
+          🌙 Toggle
         </button>
       </header>
 
@@ -111,13 +105,7 @@ export default function Home() {
       <main className="chat-wrapper">
         <div ref={chatBoxRef} id="chat-box" className="chat-box">
           {messages.map((msg, i) => (
-            <div
-              key={i}
-              className={`bubble ${msg.sender}`}
-              style={{
-                animation: "fadeIn 0.3s ease",
-              }}
-            >
+            <div key={i} className={`bubble ${msg.sender}`}>
               {msg.text}
             </div>
           ))}
@@ -143,9 +131,7 @@ export default function Home() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           />
-          <button onClick={sendMessage} disabled={loading}>
-            {loading ? "..." : "Send"}
-          </button>
+          <button onClick={sendMessage}>Send</button>
         </div>
 
         {/* ACTION BUTTONS */}
