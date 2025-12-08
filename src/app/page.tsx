@@ -19,6 +19,16 @@ export default function Home() {
     }
   }, [darkMode]);
 
+  // ✅ Default welcome message (runs once on load)
+  useEffect(() => {
+    setMessages([
+      {
+        sender: "bot",
+        text: "🤖 Inquister: Hi there! I’m Inquister — your smart AI companion. Ask me anything, and I’ll try to help you with quick and clear answers! 😊",
+      },
+    ]);
+  }, []);
+
   const playSound = () => {
     const audio = new Audio(
       "https://cdn.pixabay.com/download/audio/2022/02/15/audio_444f96b1df.mp3?filename=notification-pop-96104.mp3"

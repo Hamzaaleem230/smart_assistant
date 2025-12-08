@@ -351,3 +351,198 @@ body.dark-mode .action-buttons button:hover {
   .input-area input, .input-area button { font-size: 13px; padding: 6px 10px; }
   .action-buttons button { font-size: 11px; padding: 4px 8px; }
 }
+
+
+/* ======================== Enhancements (append only) ======================== */
+
+/* Smooth hardware-accelerated animations for key elements */
+@keyframes fadeInUpSmooth {
+  0% { opacity: 0; transform: translateY(10px); }
+  60% { opacity: 1; transform: translateY(-3px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.bubble { will-change: transform, opacity; animation: fadeInUpSmooth 360ms cubic-bezier(.2,.9,.3,1); }
+
+/* subtle glass highlight for header without changing existing bg values */
+.app-header::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 0; height: 100%;
+  pointer-events: none;
+  border-radius: inherit;
+  backdrop-filter: blur(6px);
+  opacity: 0.06;
+  transition: opacity var(--transition-fast);
+}
+
+/* make chat-box more touch-friendly on mobile */
+.chat-box {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* micro interaction when send button clicked */
+.input-area:active, .input-area:focus-within {
+  transform: translateY(-2px);
+  transition: transform 0.12s ease;
+}
+
+/* improved custom scrollbar for modern browsers (non-intrusive) */
+.chat-box::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(120,120,120,0.2), rgba(160,160,160,0.25));
+}
+
+/* Floating mobile round toggle button (only visible on small screens) */
+.mobile-theme-btn {
+  position: fixed;
+  z-index: 1600;
+  right: 18px;
+  bottom: 82px; /* above input on most phones */
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: none; /* default hidden, enabled via media queries */
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  border: 2px solid rgba(255,255,255,0.06);
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+}
+.mobile-theme-btn:active { transform: scale(0.96); }
+.mobile-theme-btn .icon {
+  font-size: 20px;
+  display: inline-block;
+  transition: transform 0.25s ease;
+  transform-origin: center;
+}
+
+/* show mobile button only on small screens (<=600) */
+@media (max-width: 600px) {
+  .mobile-theme-btn { display: flex; }
+  /* hide the header toggle on very small screens to avoid duplication */
+  .toggle-theme { display: none; }
+  /* ensure app-container uses full height and chat is vertically spacious */
+  .app-container { height: 100vh; max-width: 100%; border-radius: 0; }
+  /* ensure footer input always visible above mobile keyboard */
+  .input-area { position: sticky; bottom: 0; z-index: 1400; }
+}
+
+/* keep toggle visible on bigger screens */
+@media (min-width: 601px) {
+  .mobile-theme-btn { display: none !important; }
+  .toggle-theme { display: inline-flex; }
+}
+
+/* small visual flourish for bot avatar/logo to match reference */
+#logo {
+  box-shadow: 0 6px 20px rgba(86,45,144,0.12);
+  transition: transform 0.28s cubic-bezier(.2,.9,.3,1), box-shadow 0.28s;
+}
+#logo:hover { transform: translateY(-3px) rotate(-2deg); }
+
+/* subtle focus outlines for accessibility (no value changes to existing) */
+.input-area input:focus-visible {
+  outline: 3px solid rgba(86,45,144,0.12);
+  outline-offset: 3px;
+}
+
+/* make title compact on tiny widths without changing font-size values */
+@media (max-width: 420px) {
+  .app-header h1 { left: 0; transform: translateX(-6px); }
+}
+
+/* improve chat bubble entrance for first few messages (stagger) */
+.bubble:nth-child(odd) { animation-delay: 30ms; }
+.bubble:nth-child(even) { animation-delay: 90ms; }
+
+/* keep accessible high-contrast in dark mode for interactive buttons */
+body.dark-mode .mobile-theme-btn {
+  border-color: rgba(255,255,255,0.08);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* small bounce for new incoming bot message (subtle) */
+@keyframes msgBounce {
+  0% { transform: translateY(6px); opacity: 0; }
+  60% { transform: translateY(-2px); opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.bubble.bot.new { animation: msgBounce 380ms cubic-bezier(.2,.9,.3,1); }
+
+/* ensure action buttons wrap nicely on small widths */
+.action-buttons { flex-wrap: wrap; gap: 8px; }
+
+
+/* 🌙 Final Vertical Header Layout for Small Screens */
+@media (max-width: 650px) {
+  .app-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding: 16px 10px;
+    gap: 6px;
+  }
+
+  #logo {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    border: 2px solid white;
+    border-radius: 50%;
+    left: 0;
+    top: 0;
+  }
+
+  .app-header h1 {
+    font-size: 1.2rem;
+    margin: 6px 0;
+    color: white;
+  }
+
+  .toggle-theme {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 6px 10px;
+    background: rgba(255,255,255,0.9);
+    color: #562d90;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .toggle-theme:hover {
+    background: #e4d9fa;
+    transform: scale(1.05);
+  }
+
+  body.dark-mode .toggle-theme {
+    background: #2d2d2d;
+    color: white;
+  }
+
+  body.dark-mode .toggle-theme:hover {
+    background: #3b3b3b;
+  }
+
+  /* hide floating mobile button */
+  .mobile-theme-btn {
+    display: none !important;
+  }
+}
+
+
+/* end append */
